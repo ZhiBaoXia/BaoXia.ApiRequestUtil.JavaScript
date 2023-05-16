@@ -1,0 +1,34 @@
+{
+  "name": "@baoxia/utils.javascript",
+  "version": "1.0.0",
+  "description": "BaoXia Software，Api Request Util.",
+  "type": "module",
+  "files": [
+    "lib/"
+  ],
+  "main": "lib/index.js",
+  "scripts": {
+    "clear": "node ./buildUtil/clearBuildDirectory.js",
+    "build": "npm run clear & tsc -p tsconfig.json",
+    "test": "npm run clear & tsc -p tsconfig.test.json && node lib_test/test/index.js",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BaoXiaRuanJian/BaoXia.ApiRequestUtil.JavaScript.git"
+  },
+  "keywords": [
+    "BaoXiaTS",
+    "ApiRequest"
+  ],
+  "author": "BaoXia Software",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BaoXiaRuanJian/BaoXia.ApiRequestUtil.JavaScript/issues"
+  },
+  "homepage": "https://github.com/BaoXiaRuanJian/BaoXia.ApiRequestUtil.JavaScript#readme",
+  "dependencies": {
+    "@baoxia/utils.javascript": "^1.0.4",
+    "axios": "^1.4.0"
+  }
+}
