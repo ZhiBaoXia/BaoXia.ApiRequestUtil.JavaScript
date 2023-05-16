@@ -1,7 +1,8 @@
-import  { Axios } from 'axios'
+import { Axios } from 'axios'
 import { ApiRequestMethod } from './apiRequestMethod.js';
 import { ApiResponseThenable } from './apiResponseThenable.js';
 import { ApiResponseInfo } from './apiResponseInfo.js';
+import { PathUtil, StringUtil } from '@baoxia/utils.javascript'
 
 export abstract class ApiSet
 {
@@ -11,46 +12,53 @@ export abstract class ApiSet
 
     protected abstract readonly apiUrlRoot: string;
 
-    protected readonly apiDirectoryPath: string;
+    protected abstract readonly apiDirectoryPath: string;
 
-    protected readonly apiSetUrlRoot: string;
+    protected apiSetUrlRoot: string | null = null;
 
-    protected readonly axios: Axios;
+    protected isCredentialsEnable: boolean = true;
+
+    protected timeoutSeconds: number = 0;
+
+    protected toCreateAxios: ((
+        apiDirectoryPath: string,
+        timeoutSeconds: number,
+        isCredentialsEnable: boolean) => Axios) | null = null;
+
+    protected axios: Axios | null = null;
 
     ////////////////////////////////////////////////
     // @自身实现
     ////////////////////////////////////////////////
 
-    constructor(
-        apiDirectoryPath: string,
-        timeoutSeconds: number = 0,
-        isCredentialsEnable: boolean = true,
-        toCreateAxios: ((
-            apiDirectoryPath: string,
-            timeoutSeconds: number,
-            isCredentialsEnable: boolean) => Axios) | null = null)
+    getAxios(): Axios
     {
-        this.apiUrlRoot = this.didCreateApiUrlRoot();
-        this.apiDirectoryPath = apiDirectoryPath;
+        if (this.axios != null)
+        {
+            return this.axios;
+        }
 
-        let apiUrlRoot = this.apiUrlRoot;
-        if (!apiUrlRoot.endsWith("/"))
+        let apiSetUrlRoot: string;
         {
-            apiUrlRoot += "/";
+            let apiUrlRoot
+                = PathUtil.toDirectoryPathFromUriPath(this.apiUrlRoot);
+            let apiDirectoryPath
+                = PathUtil.toDirectoryPathFromUriPath(this.apiDirectoryPath);
+            apiDirectoryPath
+                = StringUtil.trimLeftKeywordIn("/", apiDirectoryPath);
+            //
+            apiSetUrlRoot = apiUrlRoot + apiDirectoryPath;
+            //
         }
-        while (apiDirectoryPath.startsWith("/"))
-        {
-            apiDirectoryPath = apiDirectoryPath.substring(1);
-        }
-        if (!apiDirectoryPath.endsWith("/"))
-        {
-            apiDirectoryPath += "/";
-        }
-        this.apiSetUrlRoot = apiUrlRoot + apiDirectoryPath;
+        this.apiSetUrlRoot = apiSetUrlRoot;
+
+        let timeoutSeconds = this.timeoutSeconds;
+        let isCredentialsEnable = this.isCredentialsEnable;
+        let toCreateAxios = this.toCreateAxios;
 
         let axios = toCreateAxios != null
             ? toCreateAxios(
-                apiDirectoryPath, 
+                apiSetUrlRoot,
                 timeoutSeconds,
                 isCredentialsEnable)
             : null;
@@ -58,14 +66,17 @@ export abstract class ApiSet
         {
             axios = new Axios({
                 // Api请求URL的根目录：
-                baseURL: this.apiDirectoryPath,
+                baseURL: apiSetUrlRoot,
                 // 默认的请求超时毫秒数：
                 timeout: 1000 * timeoutSeconds,
                 // 默认使用Cookie参数：
                 withCredentials: isCredentialsEnable
-            })
+            });
         }
-        this.axios = axios;
+        // !!!
+        this.axios = axios!;
+        // !!!
+        return this.axios;
     }
 
     private getResponseWithRequestMethod<RequestParamType, ResponseParamType>(
@@ -88,9 +99,10 @@ export abstract class ApiSet
         {
             case ApiRequestMethod.Post:
                 {
-                    this.axios.post(
-                        apiUrlPath,
-                        requestParam)
+                    this.getAxios()
+                        .post(
+                            apiUrlPath,
+                            requestParam)
                         .then((response) =>
                         {
                             let apiResponseInfo
@@ -120,11 +132,12 @@ export abstract class ApiSet
             case ApiRequestMethod.Get:
             default:
                 {
-                    this.axios.get(
-                        apiUrlPath,
-                        {
-                            params: requestParam
-                        })
+                    this.getAxios()
+                        .get(
+                            apiUrlPath,
+                            {
+                                params: requestParam
+                            })
                         .then((response) =>
                         {
                             let apiResponseInfo
@@ -181,35 +194,29 @@ export abstract class ApiSet
             callbackSpecified);
     }
 
-    protected get<RequestParamType, ResponseParamType>(apiMethodName:string)
-    : ((requestParam: RequestParamType) => ApiResponseThenable<ResponseParamType>)
-    {
-        var api
-        = (requestParam: RequestParamType):ApiResponseThenable<ResponseParamType> =>
-        {
-            return this.getResponseFromApi<RequestParamType, ResponseParamType>(
-                apiMethodName,
-                requestParam);
-        };
-        return api;
-    }
-
-    protected post<RequestParamType, ResponseParamType>(apiMethodName:string)
+    protected get<RequestParamType, ResponseParamType>(apiMethodName: string)
         : ((requestParam: RequestParamType) => ApiResponseThenable<ResponseParamType>)
     {
-        var api 
-        = (requestParam: RequestParamType):ApiResponseThenable<ResponseParamType>=>
-        {
-            return this.postToGetResponseFromApi<RequestParamType, ResponseParamType>(
-                apiMethodName,
-                requestParam);
-        };
+        let api
+            = (requestParam: RequestParamType): ApiResponseThenable<ResponseParamType> =>
+            {
+                return this.getResponseFromApi<RequestParamType, ResponseParamType>(
+                    apiMethodName,
+                    requestParam);
+            };
         return api;
     }
 
-    ////////////////////////////////////////////////
-    // @事件节点
-    ////////////////////////////////////////////////
-
-    protected abstract didCreateApiUrlRoot(): string;
+    protected post<RequestParamType, ResponseParamType>(apiMethodName: string)
+        : ((requestParam: RequestParamType) => ApiResponseThenable<ResponseParamType>)
+    {
+        let api
+            = (requestParam: RequestParamType): ApiResponseThenable<ResponseParamType> =>
+            {
+                return this.postToGetResponseFromApi<RequestParamType, ResponseParamType>(
+                    apiMethodName,
+                    requestParam);
+            };
+        return api;
+    }
 }

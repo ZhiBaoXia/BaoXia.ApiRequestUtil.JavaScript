@@ -1,21 +1,17 @@
 import { StringUtil } from "@baoxia/utils.javascript";
-import {ApiSet} from "../src/index.js";
+import { BaoXiaTestToolHttpRequestEchoApi } from "./base/baoXiaTestToolHttpRequestEchoApi.js";
+import { BaoXiaTestToolHttpResponse } from "./viewModel/baoXiaTestToolHttpResponse.js";
+import { TestRequestParamNameAndValue } from "./viewModel/testRequestParamNameAndValue.js";
 
-export class TestApiSet extends ApiSet
+export class TestApiSet extends BaoXiaTestToolHttpRequestEchoApi
 {
     ////////////////////////////////////////////////
     // @自身实现
     ////////////////////////////////////////////////
 
-    apiUrlRoot = "//test.baoxiaruanjian.com/";
-    
+    protected apiDirectoryPath: string = "/httpRequestEcho";
 
-    ////////////////////////////////////////////////
-    // @实现“ApiSet”
-    ////////////////////////////////////////////////
+    getWithParams = this.get<TestRequestParamNameAndValue, BaoXiaTestToolHttpResponse>("index");
 
-    protected didCreateApiUrlRoot(): string
-    {
-        return StringUtil.Empty;
-    }
+    postWithParams = this.post<TestRequestParamNameAndValue, BaoXiaTestToolHttpResponse>("index");
 }

@@ -1,0 +1,11 @@
+
+export class TestRequestParamNameAndValue
+{
+    ////////////////////////////////////////////////
+    // @自身属性
+    ////////////////////////////////////////////////
+
+    name: string | null = null;
+
+    value: any | null = null;
+}
