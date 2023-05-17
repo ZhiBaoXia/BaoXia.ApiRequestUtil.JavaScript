@@ -3,6 +3,7 @@ import { ApiRequestMethod } from './apiRequestMethod.js';
 import { ApiResponseThenable } from './apiResponseThenable.js';
 import { ApiResponseInfo } from './apiResponseInfo.js';
 import { PathUtil, StringUtil } from '@baoxia/utils.javascript'
+import { UriPathDelimiter } from '@baoxia/utils.javascript/lib/constant/uriPathDelimiter.js';
 
 export abstract class ApiSet
 {
@@ -44,10 +45,13 @@ export abstract class ApiSet
                 = PathUtil.toDirectoryPathFromUriPath(this.apiUrlRoot);
             let apiDirectoryPath
                 = PathUtil.toDirectoryPathFromUriPath(this.apiDirectoryPath);
-            apiDirectoryPath
-                = StringUtil.trimLeftKeywordIn("/", apiDirectoryPath);
             //
-            apiSetUrlRoot = apiUrlRoot + apiDirectoryPath;
+            apiSetUrlRoot
+                = StringUtil.joinStringsWithDelimiter(
+                    UriPathDelimiter.Paths,
+                    true,
+                    apiUrlRoot,
+                    apiDirectoryPath);
             //
         }
         this.apiSetUrlRoot = apiSetUrlRoot;
@@ -70,7 +74,11 @@ export abstract class ApiSet
                 // 默认的请求超时毫秒数：
                 timeout: 1000 * timeoutSeconds,
                 // 默认使用Cookie参数：
-                withCredentials: isCredentialsEnable
+                withCredentials: isCredentialsEnable,
+                // 响应转换：
+                transformResponse: function(data){
+                    
+                }
             });
         }
         // !!!
@@ -86,11 +94,6 @@ export abstract class ApiSet
         callbackSpecified: ApiResponseThenable<ResponseParamType> | null = null)
         : ApiResponseThenable<ResponseParamType>
     {
-        while (apiMethodPath.startsWith("/"))
-        {
-            apiMethodPath = apiMethodPath.substring(1);
-        }
-        let apiUrlPath = this.apiSetUrlRoot + apiMethodPath;
         let callback
             = callbackSpecified != null
                 ? callbackSpecified
@@ -101,7 +104,7 @@ export abstract class ApiSet
                 {
                     this.getAxios()
                         .post(
-                            apiUrlPath,
+                            apiMethodPath,
                             requestParam)
                         .then((response) =>
                         {
@@ -134,7 +137,7 @@ export abstract class ApiSet
                 {
                     this.getAxios()
                         .get(
-                            apiUrlPath,
+                            apiMethodPath,
                             {
                                 params: requestParam
                             })

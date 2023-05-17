@@ -3,7 +3,7 @@ import { BaoXiaTestToolHttpRequestEchoApi } from "./base/baoXiaTestToolHttpReque
 import { BaoXiaTestToolHttpResponse } from "./viewModel/baoXiaTestToolHttpResponse.js";
 import { TestRequestParamNameAndValue } from "./viewModel/testRequestParamNameAndValue.js";
 
-export class TestApiSet extends BaoXiaTestToolHttpRequestEchoApi
+export class HttpRequestEcho extends BaoXiaTestToolHttpRequestEchoApi
 {
     ////////////////////////////////////////////////
     // @自身实现

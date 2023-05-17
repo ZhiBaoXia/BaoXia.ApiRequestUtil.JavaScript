@@ -1,3 +1,4 @@
+import { JsonUtil } from "@baoxia/utils.javascript";
 
 export class ApiResponseInfo<ResponseDataType>
 {
@@ -17,10 +18,15 @@ export class ApiResponseInfo<ResponseDataType>
 
     constructor(
         error: any = null,
-        data: ResponseDataType | null = null,
+        data: ResponseDataType | string | null = null,
         response: any = null)
     {
         this.error = error;
+
+        if (typeof data === "string")
+        {
+            data = JsonUtil.parse<ResponseDataType>(data);
+        }
         this.data = data;
         this.response = response;
     }

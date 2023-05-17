@@ -1,0 +1,8 @@
+class ApiRequestMethod {
+}
+////////////////////////////////////////////////
+// @静态常量
+////////////////////////////////////////////////
+ApiRequestMethod.Get = "Get";
+ApiRequestMethod.Post = "Post";
+export { ApiRequestMethod };
