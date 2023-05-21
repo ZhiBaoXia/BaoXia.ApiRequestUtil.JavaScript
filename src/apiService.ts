@@ -5,7 +5,7 @@ import { ApiResponseInfo } from './apiResponseInfo.js';
 import { JsonUtil, ObjectUtil, PathUtil, StringUtil } from '@baoxia/utils.javascript'
 import { UriPathDelimiter } from '@baoxia/utils.javascript/lib/constant/uriPathDelimiter.js';
 
-export abstract class ApiSet
+export abstract class ApiService
 {
     ////////////////////////////////////////////////
     // @自身属性
@@ -15,7 +15,7 @@ export abstract class ApiSet
 
     protected abstract readonly apiDirectoryPath: string;
 
-    protected apiSetUrlRoot: string | null = null;
+    protected apiServiceUrlRoot: string | null = null;
 
     protected isCredentialsEnable: boolean = true;
 
@@ -41,14 +41,14 @@ export abstract class ApiSet
             return this.axios;
         }
 
-        let apiSetUrlRoot: string;
+        let apiServiceUrlRoot: string;
         {
             let apiUrlRoot
                 = PathUtil.toDirectoryPathFromUriPath(this.apiUrlRoot);
             let apiDirectoryPath
                 = PathUtil.toDirectoryPathFromUriPath(this.apiDirectoryPath);
             //
-            apiSetUrlRoot
+            apiServiceUrlRoot
                 = StringUtil.joinStringsWithDelimiter(
                     UriPathDelimiter.Paths,
                     true,
@@ -56,7 +56,7 @@ export abstract class ApiSet
                     apiDirectoryPath);
             //
         }
-        this.apiSetUrlRoot = apiSetUrlRoot;
+        this.apiServiceUrlRoot = apiServiceUrlRoot;
 
         let timeoutSeconds = this.timeoutSeconds;
         let isCredentialsEnable = this.isCredentialsEnable;
@@ -64,7 +64,7 @@ export abstract class ApiSet
 
         let axios = toCreateAxios != null
             ? toCreateAxios(
-                apiSetUrlRoot,
+                apiServiceUrlRoot,
                 timeoutSeconds,
                 isCredentialsEnable)
             : null;
@@ -72,7 +72,7 @@ export abstract class ApiSet
         {
             axios = new Axios({
                 // Api请求URL的根目录：
-                baseURL: apiSetUrlRoot,
+                baseURL: apiServiceUrlRoot,
                 // 默认的请求超时毫秒数：
                 timeout: 1000 * timeoutSeconds,
                 // 默认使用Cookie参数：
@@ -155,6 +155,10 @@ export abstract class ApiSet
                             apiMethodPath,
                             {
                                 params: requestParam,
+                                paramsSerializer: (params) =>
+                                {
+                                    return "";
+                                },
                                 transformRequest: [
                                     (data, headers) =>
                                     {

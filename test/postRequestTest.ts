@@ -14,7 +14,7 @@ export class PostRequestTest extends TestCase
             (assert, assertFalse) =>
             {
                 ////////////////////////////////////////////////
-                // @HttpRequestEchoApiSet
+                // @HttpRequestEchoApiService
                 ////////////////////////////////////////////////
 
                 let httpRequestEcho = new HttpRequestEcho();

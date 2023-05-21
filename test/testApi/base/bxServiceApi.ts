@@ -1,6 +1,6 @@
-import { ApiSet } from "../../../src/index.js";
+import { ApiService } from "../../../src/index.js";
 
-export abstract class BxServiceApi extends ApiSet
+export abstract class BxServiceApi extends ApiService
 {
     ////////////////////////////////////////////////
     // @自身实现

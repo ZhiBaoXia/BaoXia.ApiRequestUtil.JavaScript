@@ -1,7 +1,7 @@
 import { ApiRequestMethod } from "./apiRequestMethod.js";
 import { ApiResponseInfo } from "./apiResponseInfo.js";
 import { ApiResponseThenable } from "./apiResponseThenable.js";
-import { ApiSet } from "./apiSet.js";
+import { ApiService } from "./apiService.js";
 
 
 export
@@ -9,5 +9,5 @@ export
     ApiRequestMethod,
     ApiResponseInfo,
     ApiResponseThenable,
-    ApiSet
+    ApiService
 }
