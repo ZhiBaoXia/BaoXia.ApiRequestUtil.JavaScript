@@ -1,0 +1,6 @@
+# 忽略“dist”文件夹下的内容。
+dist/
+# 忽略“lib”文件夹下的内容。
+lib/
+# 忽略“lib_test”文件夹下的内容。
+lib_test/
