@@ -1,8 +1,8 @@
-import { Axios } from 'axios'
+import { Axios, AxiosResponseHeaders } from 'axios'
 import { ApiRequestMethod } from './apiRequestMethod.js';
 import { ApiResponseThenable } from './apiResponseThenable.js';
 import { ApiResponseInfo } from './apiResponseInfo.js';
-import { PathUtil, StringUtil } from '@baoxia/utils.javascript'
+import { JsonUtil, ObjectUtil, PathUtil, StringUtil } from '@baoxia/utils.javascript'
 import { UriPathDelimiter } from '@baoxia/utils.javascript/lib/constant/uriPathDelimiter.js';
 
 export abstract class ApiSet
@@ -21,6 +21,8 @@ export abstract class ApiSet
 
     protected timeoutSeconds: number = 0;
 
+    protected isBaoXiaJsonSerializerEnable: boolean = true;
+
     protected toCreateAxios: ((
         apiDirectoryPath: string,
         timeoutSeconds: number,
@@ -32,7 +34,7 @@ export abstract class ApiSet
     // @自身实现
     ////////////////////////////////////////////////
 
-    getAxios(): Axios
+    protected getAxios(): Axios
     {
         if (this.axios != null)
         {
@@ -74,11 +76,7 @@ export abstract class ApiSet
                 // 默认的请求超时毫秒数：
                 timeout: 1000 * timeoutSeconds,
                 // 默认使用Cookie参数：
-                withCredentials: isCredentialsEnable,
-                // 响应转换：
-                transformResponse: function(data){
-                    
-                }
+                withCredentials: isCredentialsEnable
             });
         }
         // !!!
@@ -105,7 +103,24 @@ export abstract class ApiSet
                     this.getAxios()
                         .post(
                             apiMethodPath,
-                            requestParam)
+                            requestParam,
+                            {
+                                transformRequest: [
+                                    (data, headers) =>
+                                    {
+                                        return this.didTransformRequest(
+                                            data,
+                                            headers);
+                                    }],
+                                transformResponse: [
+                                    (data, headers, statusCode) =>
+                                    {
+                                        return this.didTransformResponse<ResponseParamType>(
+                                            data,
+                                            headers,
+                                            statusCode);
+                                    }]
+                            })
                         .then((response) =>
                         {
                             let apiResponseInfo
@@ -139,7 +154,22 @@ export abstract class ApiSet
                         .get(
                             apiMethodPath,
                             {
-                                params: requestParam
+                                params: requestParam,
+                                transformRequest: [
+                                    (data, headers) =>
+                                    {
+                                        return this.didTransformRequest(
+                                            data,
+                                            headers);
+                                    }],
+                                transformResponse: [
+                                    (data, headers, statusCode) =>
+                                    {
+                                        return this.didTransformResponse<ResponseParamType>(
+                                            data,
+                                            headers,
+                                            statusCode);
+                                    }]
                             })
                         .then((response) =>
                         {
@@ -221,5 +251,41 @@ export abstract class ApiSet
                     requestParam);
             };
         return api;
+    }
+
+    ////////////////////////////////////////////////
+    // @事件节点
+    ////////////////////////////////////////////////
+
+    protected didTransformRequest(
+        data: any,
+        headers: AxiosResponseHeaders,
+        statusCode?: number): any
+    {
+        return data;
+    }
+
+    protected didTransformResponse<ResponseParamType>(
+        data: any,
+        headers: AxiosResponseHeaders,
+        statusCode?: number): ResponseParamType | null
+    {
+        if (data == null
+            || typeof data == undefined)
+        {
+            return data;
+        }
+        if (!this.isBaoXiaJsonSerializerEnable)
+        {
+            return data;
+        }
+
+        let dataTypeName = typeof data;
+        if (dataTypeName === "string"
+            || dataTypeName == "object")
+        {
+            return JsonUtil.parseOrConvertValue<ResponseParamType>(data);
+        }
+        return data;
     }
 }

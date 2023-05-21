@@ -1,7 +1,7 @@
 
-import {Thenable} from '@baoxia/utils.javascript/lib/thenable.js';
+import {Thenable} from '@baoxia/utils.javascript';
 import type { ApiResponseInfo } from './apiResponseInfo.js';
 
 export class ApiResponseThenable<ResponseParamType> 
-    extends Thenable<ApiResponseInfo<ResponseParamType>>
+    extends Thenable<string | null, ApiResponseInfo<ResponseParamType>>
 {}

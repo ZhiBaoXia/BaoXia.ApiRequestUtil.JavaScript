@@ -2,7 +2,7 @@ import { Axios } from 'axios';
 import { ApiRequestMethod } from './apiRequestMethod.js';
 import { ApiResponseThenable } from './apiResponseThenable.js';
 import { ApiResponseInfo } from './apiResponseInfo.js';
-import { PathUtil, StringUtil } from '@baoxia/utils.javascript';
+import { JsonUtil, PathUtil, StringUtil } from '@baoxia/utils.javascript';
 import { UriPathDelimiter } from '@baoxia/utils.javascript/lib/constant/uriPathDelimiter.js';
 export class ApiSet {
     constructor() {
@@ -12,6 +12,7 @@ export class ApiSet {
         this.apiSetUrlRoot = null;
         this.isCredentialsEnable = true;
         this.timeoutSeconds = 0;
+        this.isBaoXiaJsonSerializerEnable = true;
         this.toCreateAxios = null;
         this.axios = null;
     }
@@ -61,7 +62,18 @@ export class ApiSet {
             case ApiRequestMethod.Post:
                 {
                     this.getAxios()
-                        .post(apiMethodPath, requestParam)
+                        .post(apiMethodPath, requestParam, {
+                        transformRequest: [
+                            (data, headers) => {
+                                return this.didTransformRequest(data, headers);
+                            }
+                        ],
+                        transformResponse: [
+                            (data, headers, statusCode) => {
+                                return this.didTransformResponse(data, headers, statusCode);
+                            }
+                        ]
+                    })
                         .then((response) => {
                         let apiResponseInfo = new ApiResponseInfo(null, response.data, response);
                         ////////////////////////////////////////////////                    
@@ -84,7 +96,17 @@ export class ApiSet {
                 {
                     this.getAxios()
                         .get(apiMethodPath, {
-                        params: requestParam
+                        params: requestParam,
+                        transformRequest: [
+                            (data, headers) => {
+                                return this.didTransformRequest(data, headers);
+                            }
+                        ],
+                        transformResponse: [
+                            (data, headers, statusCode) => {
+                                return this.didTransformResponse(data, headers, statusCode);
+                            }
+                        ]
                     })
                         .then((response) => {
                         let apiResponseInfo = new ApiResponseInfo(null, response.data, response);
@@ -123,5 +145,26 @@ export class ApiSet {
             return this.postToGetResponseFromApi(apiMethodName, requestParam);
         };
         return api;
+    }
+    ////////////////////////////////////////////////
+    // @事件节点
+    ////////////////////////////////////////////////
+    didTransformRequest(data, headers, statusCode) {
+        return data;
+    }
+    didTransformResponse(data, headers, statusCode) {
+        if (data == null
+            || typeof data == undefined) {
+            return data;
+        }
+        if (!this.isBaoXiaJsonSerializerEnable) {
+            return data;
+        }
+        let dataTypeName = typeof data;
+        if (dataTypeName === "string"
+            || dataTypeName == "object") {
+            return JsonUtil.parseOrConvertValue(data);
+        }
+        return data;
     }
 }

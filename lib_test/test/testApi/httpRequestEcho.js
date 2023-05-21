@@ -1,5 +1,5 @@
 import { BaoXiaTestToolHttpRequestEchoApi } from "./base/baoXiaTestToolHttpRequestEchoApi.js";
-export class TestApiSet extends BaoXiaTestToolHttpRequestEchoApi {
+export class HttpRequestEcho extends BaoXiaTestToolHttpRequestEchoApi {
     constructor() {
         ////////////////////////////////////////////////
         // @自身实现

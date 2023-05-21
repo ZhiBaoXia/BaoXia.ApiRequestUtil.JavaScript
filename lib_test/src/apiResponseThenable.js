@@ -1,3 +1,3 @@
-import { Thenable } from '@baoxia/utils.javascript/lib/thenable.js';
+import { Thenable } from '@baoxia/utils.javascript';
 export class ApiResponseThenable extends Thenable {
 }

@@ -1,5 +1,4 @@
-// //testtools.baoxiaruanjian.com/httpRequestEcho
-import { ApiSet } from "../../src/index.js";
+import { ApiSet } from "../../../src/index.js";
 export class BaoXiaTestToolHttpRequestEchoApi extends ApiSet {
     constructor() {
         ////////////////////////////////////////////////
