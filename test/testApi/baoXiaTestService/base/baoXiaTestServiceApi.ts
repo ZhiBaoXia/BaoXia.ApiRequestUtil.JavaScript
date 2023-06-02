@@ -1,6 +1,6 @@
-import {ApiService} from "../../../src/index.js";
+import {ApiService} from "../../../../src/index.js";
 
-export abstract class BaoXiaTestToolHttpRequestEchoApi extends ApiService
+export abstract class BaoXiaTestServiceApi extends ApiService
 {
     ////////////////////////////////////////////////
     // @自身实现

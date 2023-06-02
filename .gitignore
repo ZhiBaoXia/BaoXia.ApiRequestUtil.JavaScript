@@ -5,5 +5,5 @@ node_modules/
 dist/
 # 忽略“lib”文件夹下的内容。
 lib/
-# 忽略“lib_test”文件夹下的内容。
-lib_test/
+# 忽略“debug”文件夹下的内容。
+debug/

@@ -1,22 +1,28 @@
 import { DateTime } from "@baoxia/utils.javascript";
 
-export class BxServiceStateReportRequest
+export class NameAndValueParam
 {
     ////////////////////////////////////////////////
     // @自身属性
     ////////////////////////////////////////////////
 
-    reportBeginTime:DateTime;
+    name: string | null;
 
-    reportEndTime:DateTime;
+    value: any | null;
+
+    dateTime:DateTime | null;
 
     ////////////////////////////////////////////////
     // @自身实现
     ////////////////////////////////////////////////
 
-    constructor(reportBeginTime:DateTime,reportEndTime:DateTime)
+    constructor(
+        name: string | null = null,
+        value: any | null = null,
+        dateTime:DateTime | null = null)
     {
-        this.reportBeginTime = reportBeginTime;
-        this.reportEndTime = reportEndTime;
+        this.name = name;
+        this.value = value;
+        this.dateTime = dateTime;
     }
 }

@@ -8,10 +8,11 @@
   ],
   "main": "lib/index.js",
   "scripts": {
-    "clear": "node ./buildUtil/clearBuildDirectory.js",
+    "test": "npm run clear & tsc -p tsconfig.test.json && node debug/test/index.js",
     "build": "npm run clear & tsc -p tsconfig.json",
-    "test": "npm run clear & tsc -p tsconfig.test.json && node lib_test/test/index.js",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "clear": "node ./buildUtil/clearBuildDirectory.js",
+    "copyFile": "node ./buildUtil/copyFile.js"
   },
   "repository": {
     "type": "git",

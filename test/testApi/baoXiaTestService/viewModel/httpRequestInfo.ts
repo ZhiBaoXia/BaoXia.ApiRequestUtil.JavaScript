@@ -1,5 +1,5 @@
 
-export class BaoXiaTestToolHttpRequestInfo
+export class HttpRequestInfo
 {
     ////////////////////////////////////////////////
     // @自身属性

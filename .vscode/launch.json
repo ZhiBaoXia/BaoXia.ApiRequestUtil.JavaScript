@@ -11,7 +11,8 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\lib_test\\test\\index.js",
+            "program": "${workspaceFolder}\\debug\\test\\index.js",
+            "preLaunchTask": "npm: test",
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ]

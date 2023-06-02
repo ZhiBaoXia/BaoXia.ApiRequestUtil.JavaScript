@@ -1,7 +1,7 @@
 
 import fs from 'fs';
 
-const pathsNeedClear = ['./lib/', './lib_test/'];
+const pathsNeedClear = ['./lib/', './debug/'];
 
 for (let pathNeedClear of pathsNeedClear)
 {
