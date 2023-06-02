@@ -1,5 +1,5 @@
 {
-  "name": "@baoxia/utils.javascript",
+  "name": "@baoxia/apirequestutil.javascript",
   "version": "1.0.0",
   "description": "BaoXia Software，Api Request Util.",
   "type": "module",
