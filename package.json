@@ -1,6 +1,6 @@
 {
   "name": "@baoxia/apirequestutil.javascript",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "BaoXia Software，Api Request Util.",
   "type": "module",
   "files": [
@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/BaoXiaRuanJian/BaoXia.ApiRequestUtil.JavaScript#readme",
   "dependencies": {
-    "@baoxia/utils.javascript": "^1.0.6",
+    "@baoxia/utils.javascript": "^1.0.8",
     "axios": "^1.4.0",
     "ts-node": "^10.9.1"
   }
