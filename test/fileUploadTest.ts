@@ -24,7 +24,7 @@ export class FileUploadTest extends TestCase
                     2.0,
                     3.0,
                     "Abc",
-                    DateTime.now))
+                    DateTime.Now))
                     .then((error, response) =>
                     {
                         if (StringUtil.isNotEmpty(error))

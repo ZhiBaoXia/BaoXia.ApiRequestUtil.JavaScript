@@ -23,7 +23,7 @@ export class HttpRequestEchoTest extends TestCase
                     new NameAndValueParam(
                         "测试请求参数名称",
                         "测试请求参数值",
-                        DateTime.now))
+                        DateTime.Now))
                     .then((error, response) =>
                     {
                         if (StringUtil.isNotEmpty(error))
