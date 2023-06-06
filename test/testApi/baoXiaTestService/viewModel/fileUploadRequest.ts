@@ -32,7 +32,7 @@ export class FileUploadRequest
         floatValue: number = 2.2,
         doubleValue: number = 3.3,
         stringValue: string = "Abc",
-        dateTimeValue: DateTime = DateTime.now)
+        dateTimeValue: DateTime = DateTime.Now)
     {
         this.fileValue = fileValue;
         this.boolValue = boolValue;
