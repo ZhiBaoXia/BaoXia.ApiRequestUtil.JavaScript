@@ -1,0 +1,12 @@
+
+export class Response
+{
+    ////////////////////////////////////////////////
+    // @自身属性
+    ////////////////////////////////////////////////
+
+    error: string | null = null;
+
+    errorDescription: string | null = null;
+
+}
