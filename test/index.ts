@@ -1,16 +1,17 @@
 import { TestProject } from "@baoxia/utils.javascript";
-import { HttpRequestEchoTest } from "./httpRequestEchoTest.js";
-import { FileUploadTest } from "./fileUploadTest.js";
 import { BxServiceTest } from "./bxServiceTest.js";
+import { HttpRequestEchoAsyncTest } from "./httpRequestEchoAsyncTest.js";
+import { HttpRequestEchoTest } from "./httpRequestEchoTest.js";
 
 let testProject = new TestProject(
-    "BaoXia.ApiRequestUtil.Javascript",
-    [
-        // new HttpRequestEchoTest(),
-        // new FileUploadTest(),
-        new BxServiceTest()
+	"BaoXia.ApiRequestUtil.Javascript",
+	[
+		new HttpRequestEchoTest(),
+		new HttpRequestEchoAsyncTest(),
+		// new FileUploadTest(),
+		new BxServiceTest()
 
-    ]);
+	]);
 // !!!
-testProject.test();
+await testProject.testAsync();
 // !!!
