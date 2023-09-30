@@ -6,11 +6,11 @@ export class ApiResponseInfo<ResponseDataType>
     // @自身属性
     ////////////////////////////////////////////////
 
-    error: any;
+    public error: any;
 
-    data: ResponseDataType | null;
+    public data: ResponseDataType | null;
 
-    response: any;
+    public response: any;
 
     ////////////////////////////////////////////////
     // @自身实现
