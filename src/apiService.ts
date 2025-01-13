@@ -1,6 +1,8 @@
 import { DateTime, JsonUtil, PathUtil, StringUtil } from '@baoxia/utils.javascript';
 import { UriPathDelimiter } from '@baoxia/utils.javascript/lib/constant/uriPathDelimiter.js';
-import axios, { AxiosInstance, AxiosResponseHeaders } from 'axios';
+import axios, { AxiosInstance, AxiosRequestHeaders, AxiosResponseHeaders } from 'axios';
+// node环境下需要使用“form-data”。
+// import FormData from 'form-data';
 import { ApiRequestContentType } from './apiRequestContentType.js';
 import { ApiRequestMethod } from './apiRequestMethod.js';
 import { ApiResponseInfo } from './apiResponseInfo.js';
@@ -458,6 +460,9 @@ export abstract class ApiService
 					}
 					catch (exception: unknown)
 					{
+						// !!!
+						console.error(exception);
+						// !!!
 						apiResponseInfo
 							= new ApiResponseInfo<ResponseParamType>(
 								exception,
@@ -544,6 +549,9 @@ export abstract class ApiService
 					}
 					catch (exception: unknown)
 					{
+						// !!!
+						console.error(exception);
+						// !!!
 						apiResponseInfo
 							= new ApiResponseInfo<ResponseParamType>(
 								exception,
@@ -617,8 +625,7 @@ export abstract class ApiService
 
 	protected didTransformRequest(
 		data: any,
-		headers: AxiosResponseHeaders,
-		statusCode?: number): string | ArrayBuffer | Buffer | null
+		headers: AxiosRequestHeaders): string | ArrayBuffer | Buffer | null
 	{
 		return data;
 	}
