@@ -1,6 +1,6 @@
 import { DateTime, JsonUtil, PathUtil, StringUtil } from '@baoxia/utils.javascript';
 import { UriPathDelimiter } from '@baoxia/utils.javascript/lib/constant/uriPathDelimiter.js';
-import axios, { AxiosInstance, AxiosRequestHeaders, AxiosResponseHeaders } from 'axios';
+import axios, { AxiosInstance, AxiosRequestHeaders, AxiosResponseHeaders, CreateAxiosDefaults } from 'axios';
 // node环境下需要使用“form-data”。
 // import FormData from 'form-data';
 import { ApiRequestContentType } from './apiRequestContentType.js';
@@ -60,30 +60,14 @@ export abstract class ApiService
 			//
 		}
 		this.apiServiceUrlRoot = apiServiceUrlRoot;
-
 		let timeoutSeconds = this.timeoutSeconds;
 		let isCredentialsEnable = this.isCredentialsEnable;
-		let toCreateAxios = this.toCreateAxios;
 
-		let axiosInstance = toCreateAxios != null
-			? toCreateAxios(
-				apiServiceUrlRoot,
-				timeoutSeconds,
-				isCredentialsEnable)
-			: null;
-		if (axiosInstance == null)
-		{
-			axiosInstance = axios.create({
-				// Api请求URL的根目录：
-				baseURL: apiServiceUrlRoot,
-				// 默认的请求超时毫秒数：
-				timeout: 1000 * timeoutSeconds,
-				// 默认使用Cookie参数：
-				withCredentials: isCredentialsEnable
-			});
-		}
 		// !!!
-		this.axios = axiosInstance!;
+		this.axios = this.didCreateAxios(
+			apiServiceUrlRoot,
+			timeoutSeconds,
+			isCredentialsEnable);
 		// !!!
 		return this.axios;
 	}
@@ -622,6 +606,57 @@ export abstract class ApiService
 	////////////////////////////////////////////////
 	// @事件节点
 	////////////////////////////////////////////////
+
+	protected didCreateAxios(
+		apiDirectoryPath: string,
+		timeoutSeconds: number,
+		isCredentialsEnable: boolean): AxiosInstance
+	{
+		let toCreateAxios = this.toCreateAxios;
+		let axiosInstance = toCreateAxios != null
+			? toCreateAxios(
+				apiDirectoryPath,
+				timeoutSeconds,
+				isCredentialsEnable)
+			: null;
+		if (axiosInstance == null)
+		{
+			let axiosConfig
+				= this.didCreateAxiosConfig(
+					apiDirectoryPath,
+					timeoutSeconds,
+					isCredentialsEnable);
+			if (axiosConfig != null)
+			{
+				// !!!
+				axiosInstance = axios.create(axiosConfig);
+				// !!!
+			}
+			else
+			{
+				// !!!
+				axiosInstance = axios.create();
+				// !!!
+			}
+		}
+		return axiosInstance;
+	}
+
+	protected didCreateAxiosConfig(
+		apiDirectoryPath: string,
+		timeoutSeconds: number,
+		isCredentialsEnable: boolean): CreateAxiosDefaults<any> | null
+	{
+		let axiosConfig: CreateAxiosDefaults<any> = {
+			// Api请求URL的根目录：
+			baseURL: apiDirectoryPath,
+			// 默认的请求超时毫秒数：
+			timeout: 1000 * timeoutSeconds,
+			// 默认使用Cookie参数：
+			withCredentials: isCredentialsEnable,
+		};
+		return axiosConfig;
+	}
 
 	protected didTransformRequest(
 		data: any,
