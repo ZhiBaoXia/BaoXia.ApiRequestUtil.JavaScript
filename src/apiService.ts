@@ -14,7 +14,9 @@ export abstract class ApiService
 	// @自身属性
 	////////////////////////////////////////////////
 
-	protected abstract readonly apiUrlRoot: string;
+	// #region
+
+	protected abstract readonly apiUrlRootPath: string | null;
 
 	protected abstract readonly apiDirectoryPath: string;
 
@@ -33,9 +35,14 @@ export abstract class ApiService
 
 	protected axios: AxiosInstance | null = null;
 
+	// #endregion
+
+
 	////////////////////////////////////////////////
 	// @自身实现
 	////////////////////////////////////////////////
+
+	// #region
 
 	protected getAxios(): AxiosInstance
 	{
@@ -46,8 +53,13 @@ export abstract class ApiService
 
 		let apiServiceUrlRoot: string;
 		{
-			let apiUrlRoot
-				= PathUtil.toDirectoryPathFromUriPath(this.apiUrlRoot);
+			let apiUrlRootPath = this.apiUrlRootPath;
+			if (StringUtil.isEmpty(apiUrlRootPath))
+			{
+				apiUrlRootPath = this.didGetApiRootPath();
+			}
+			apiUrlRootPath
+				= PathUtil.toDirectoryPathFromUriPath(apiUrlRootPath);
 			let apiDirectoryPath
 				= PathUtil.toDirectoryPathFromUriPath(this.apiDirectoryPath);
 			//
@@ -55,7 +67,7 @@ export abstract class ApiService
 				= StringUtil.joinStringsWithDelimiter(
 					UriPathDelimiter.Paths,
 					true,
-					apiUrlRoot,
+					apiUrlRootPath,
 					apiDirectoryPath);
 			//
 		}
@@ -603,9 +615,19 @@ export abstract class ApiService
 		return api;
 	}
 
+	// #endregion
+
+
 	////////////////////////////////////////////////
 	// @事件节点
 	////////////////////////////////////////////////
+
+	// #region
+
+	protected didGetApiRootPath(): string | null
+	{
+		return null;
+	}
 
 	protected didCreateAxios(
 		apiDirectoryPath: string,
@@ -690,4 +712,6 @@ export abstract class ApiService
 		}
 		return data;
 	}
+
+	// #endregion
 }
