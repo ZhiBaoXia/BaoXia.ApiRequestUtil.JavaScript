@@ -11,4 +11,3 @@ export class ApiRequestContentType
 
     static readonly FormData = "multipart/form-data";
 }
-export default ApiRequestContentType;
