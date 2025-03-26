@@ -113,25 +113,36 @@ export abstract class ApiService
 							ApiRequestContentType.FormData,
 							requestContentType))
 						{
-							let formData = new FormData();
+							if (typeof window != undefined
+								&& window.FormData)
 							{
-								let requestParamAny = requestParam as any;
-								for (let formParamName in requestParam)
+								let formData = new FormData();
 								{
-									let formParamValue = requestParamAny[formParamName];
-									if (formParamValue instanceof DateTime)
+									let requestParamAny = requestParam as any;
+									for (let formParamName in requestParam)
 									{
-										formParamValue
-											= (formParamValue as DateTime).toISOString();
+										let formParamValue = requestParamAny[formParamName];
+										if (formParamValue instanceof DateTime)
+										{
+											formParamValue
+												= (formParamValue as DateTime).toISOString();
+										}
+										// !!!
+										formData.append(
+											formParamName,
+											formParamValue);
+										// !!!
 									}
-									// !!!
-									formData.append(
-										formParamName,
-										formParamValue);
-									// !!!
 								}
+								finalRequestParam = formData;
 							}
-							finalRequestParam = formData;
+							else
+							{
+								//
+								console.error(`#BaoXia.ApiRequestUtil.JavaScript#，当前运行环境（可能为小程序，或Node环境）不支持“FormData类型”，因此要提交至“${apiMethodPath}”的请求参数将被转换为“JSON字符串”。`);
+								//
+								finalRequestParam = requestParam;
+							}
 						}
 						else
 						{
@@ -157,10 +168,14 @@ export abstract class ApiService
 												headers);
 										if (finalRequestData != null)
 										{
-											if (typeof finalRequestData === 'object'
-												&& !(finalRequestData instanceof FormData))
+											if (typeof finalRequestData === 'object')
 											{
-												finalRequestData = JSON.stringify(finalRequestData);
+												if (typeof window == 'undefined'
+													|| !window.FormData
+													|| !(finalRequestData instanceof FormData))
+												{
+													finalRequestData = JSON.stringify(finalRequestData);
+												}
 											}
 										}
 										return finalRequestData;
@@ -386,25 +401,36 @@ export abstract class ApiService
 								ApiRequestContentType.FormData,
 								requestContentType))
 							{
-								let formData = new FormData();
+								if (typeof window != undefined
+									&& window.FormData)
 								{
-									let requestParamAny = requestParam as any;
-									for (let formParamName in requestParam)
+									let formData = new FormData();
 									{
-										let formParamValue = requestParamAny[formParamName];
-										if (formParamValue instanceof DateTime)
+										let requestParamAny = requestParam as any;
+										for (let formParamName in requestParam)
 										{
-											formParamValue
-												= (formParamValue as DateTime).toISOString();
+											let formParamValue = requestParamAny[formParamName];
+											if (formParamValue instanceof DateTime)
+											{
+												formParamValue
+													= (formParamValue as DateTime).toISOString();
+											}
+											// !!!
+											formData.append(
+												formParamName,
+												formParamValue);
+											// !!!
 										}
-										// !!!
-										formData.append(
-											formParamName,
-											formParamValue);
-										// !!!
 									}
+									finalRequestParam = formData;
 								}
-								finalRequestParam = formData;
+								else
+								{
+									//
+									console.error(`#BaoXia.ApiRequestUtil.JavaScript#，当前运行环境（可能为小程序，或Node环境）不支持“FormData类型”，因此要提交至“${apiMethodPath}”的请求参数将被转换为“JSON字符串”。`);
+									//
+									finalRequestParam = requestParam;
+								}
 							}
 							else
 							{
@@ -431,10 +457,15 @@ export abstract class ApiService
 														headers);
 												if (finalRequestData != null)
 												{
-													if (typeof finalRequestData === 'object'
-														&& !(finalRequestData instanceof FormData))
+
+													if (typeof finalRequestData === 'object')
 													{
-														finalRequestData = JSON.stringify(finalRequestData);
+														if (typeof window == 'undefined'
+															|| !window.FormData
+															|| !(finalRequestData instanceof FormData))
+														{
+															finalRequestData = JSON.stringify(finalRequestData);
+														}
 													}
 												}
 												return finalRequestData;
