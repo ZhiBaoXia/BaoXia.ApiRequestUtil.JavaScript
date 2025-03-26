@@ -31,3 +31,4 @@ export class ApiResponseInfo<ResponseDataType>
         this.response = response;
     }
 }
+export default ApiResponseInfo;
