@@ -9,4 +9,3 @@ export class ApiRequestMethod
 
     static readonly Post = "Post";
 }
-export default ApiRequestMethod;

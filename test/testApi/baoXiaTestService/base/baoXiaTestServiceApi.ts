@@ -7,8 +7,7 @@ export abstract class BaoXiaTestServiceApi extends ApiService
 	// @自身实现
 	////////////////////////////////////////////////
 
-	// apiUrlRootPath = "//testtools.baoxiaruanjian.com/";
-	apiUrlRootPath = "https://testtools.baoxiaruanjian.com/";
+	apiUrlRootPath = "//testtools.baoxiaruanjian.com/";
 
 	////////////////////////////////////////////////
 	// @重载
