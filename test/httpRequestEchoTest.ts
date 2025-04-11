@@ -26,9 +26,9 @@ export class HttpRequestEchoTest extends TestCase
 						DateTime.Now))
 					.then((error, response) =>
 					{
-						if (StringUtil.isNotEmpty(error))
+						if (error != null)
 						{
-							console.log("HttpRequestEcho.getWithParams，请求失败：" + error);
+							console.log("HttpRequestEcho.getWithParams，请求失败。", error);
 						}
 						else
 						{
@@ -45,9 +45,9 @@ export class HttpRequestEchoTest extends TestCase
 				httpRequestEcho.getWithoutParams()
 					.then((error, response) =>
 					{
-						if (StringUtil.isNotEmpty(error))
+						if (error != null)
 						{
-							console.log("HttpRequestEcho.getWithoutParams，请求失败：" + error);
+							console.log("HttpRequestEcho.getWithoutParams，请求失败。", error);
 						}
 						else
 						{
@@ -68,9 +68,9 @@ export class HttpRequestEchoTest extends TestCase
 						"测试请求参数值"))
 					.then((error, response) =>
 					{
-						if (StringUtil.isNotEmpty(error))
+						if (error != null)
 						{
-							console.log("HttpRequestEcho.postWithParams，请求失败：" + error);
+							console.log("HttpRequestEcho.postWithParams，请求失败。", error);
 						}
 						else
 						{
@@ -87,9 +87,9 @@ export class HttpRequestEchoTest extends TestCase
 				httpRequestEcho.postWithoutParams()
 					.then((error, response) =>
 					{
-						if (StringUtil.isNotEmpty(error))
+						if (error != null)
 						{
-							console.log("HttpRequestEcho.postWithParams，请求失败：" + error);
+							console.log("HttpRequestEcho.postWithParams，请求失败。", error);
 						}
 						else
 						{
