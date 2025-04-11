@@ -1,6 +1,6 @@
 import { DateTime, JsonUtil, PathUtil, StringUtil } from '@baoxia/utils.javascript';
 import { UriPathDelimiter } from '@baoxia/utils.javascript/lib/constant/uriPathDelimiter.js';
-import axios, { AxiosHeaders, AxiosInstance, AxiosRequestHeaders, AxiosResponseHeaders, CreateAxiosDefaults, RawAxiosRequestHeaders } from 'axios';
+import axios, { AxiosError, AxiosHeaders, AxiosInstance, AxiosRequestHeaders, AxiosResponseHeaders, CreateAxiosDefaults, RawAxiosRequestHeaders } from 'axios';
 // node环境下需要使用“form-data”。
 // import FormData from 'form-data';
 import { ApiRequestContentType } from './apiRequestContentType.js';
@@ -203,7 +203,7 @@ export abstract class ApiService
 							// !!!
 							////////////////////////////////////////////////
 						})
-						.catch((error) =>
+						.catch((error: AxiosError | any) =>
 						{
 							////////////////////////////////////////////////                    
 							// !!!
@@ -300,7 +300,7 @@ export abstract class ApiService
 							// !!!
 							////////////////////////////////////////////////
 						})
-						.catch((error) =>
+						.catch((error: AxiosError | any) =>
 						{
 							////////////////////////////////////////////////                    
 							// !!!
