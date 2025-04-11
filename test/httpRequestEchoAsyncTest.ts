@@ -24,9 +24,9 @@ export class HttpRequestEchoAsyncTest extends TestCaseAsync
 						"测试请求参数名称",
 						"测试请求参数值",
 						DateTime.Now));
-				if (StringUtil.isNotEmpty(response.error))
+				if (response.error != null)
 				{
-					console.log("HttpRequestEcho.getWithParamsAsync，请求失败：" + response.error);
+					console.log("HttpRequestEcho.getWithParamsAsync，请求失败。", response.error);
 				}
 				else
 				{
@@ -39,9 +39,9 @@ export class HttpRequestEchoAsyncTest extends TestCaseAsync
 				// @Get 请求，无参数
 				////////////////////////////////////////////////
 				response = await httpRequestEchoAsync.getWithoutParamsAsync();
-				if (StringUtil.isNotEmpty(response.error))
+				if (response.error != null)
 				{
-					console.log("HttpRequestEcho.getWithoutParamsAsync，请求失败：" + response.error);
+					console.log("HttpRequestEcho.getWithoutParamsAsync，请求失败。", response.error);
 				}
 				else
 				{
@@ -58,9 +58,9 @@ export class HttpRequestEchoAsyncTest extends TestCaseAsync
 					new NameAndValueParam(
 						"测试请求参数名称",
 						"测试请求参数值"));
-				if (StringUtil.isNotEmpty(response.error))
+				if (response.error != null)
 				{
-					console.log("HttpRequestEcho.postWithParamsAsync，请求失败：" + response.error);
+					console.log("HttpRequestEcho.postWithParamsAsync，请求失败。", response.error);
 				}
 				else
 				{
@@ -74,9 +74,9 @@ export class HttpRequestEchoAsyncTest extends TestCaseAsync
 				// @Post 请求，无参数。
 				////////////////////////////////////////////////
 				response = await httpRequestEchoAsync.postWithoutParamsAsync();
-				if (StringUtil.isNotEmpty(response.error))
+				if (response.error != null)
 				{
-					console.log("HttpRequestEcho.postWithParamsAsync，请求失败：" + response.error);
+					console.log("HttpRequestEcho.postWithParamsAsync，请求失败。", response.error);
 				}
 				else
 				{
