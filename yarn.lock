@@ -3,9 +3,9 @@
 
 
 "@baoxia/utils.javascript@^1.0.14":
-  version "1.0.33"
-  resolved "https://registry.yarnpkg.com/@baoxia/utils.javascript/-/utils.javascript-1.0.33.tgz#797c961536381e3a30d97fe9f109b3fda5b67dae"
-  integrity sha512-1wfe9bBelrw4e85HT8h8at8aSU1XxzXx9ci+0kQqcsO7oW1i2J3pd98ScOu0pUHxQfRO92rzmBoDkLLyjuLJbg==
+  version "1.0.34"
+  resolved "https://registry.yarnpkg.com/@baoxia/utils.javascript/-/utils.javascript-1.0.34.tgz#1b7a5b5350b8b7a2b51d64a0b7796d7e33c5eaec"
+  integrity sha512-uLWyAbSJzE/cyrGz7l1eowC7FEENK66T3Z/VfNFS4qqyDuMqPTE0k/lMmBLYjx9xU3f5ZfM9bUv/yFAZx7+cWQ==
 
 "@cspotcode/source-map-support@^0.8.0":
   version "0.8.1"
