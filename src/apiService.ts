@@ -721,10 +721,11 @@ export abstract class ApiService
 
 	protected didTransformRequest(
 		data: any,
-		headers: AxiosRequestHeaders): string | ArrayBuffer | Buffer | null
+		headers: AxiosRequestHeaders): string | ArrayBuffer | null // | Buffer | null
 	{
 		return data;
 	}
+	
 
 	protected didTransformResponse<ResponseParamType>(
 		data: any,
