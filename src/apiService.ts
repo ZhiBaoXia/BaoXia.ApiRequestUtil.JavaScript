@@ -721,7 +721,7 @@ export abstract class ApiService
 
 	protected didTransformRequest(
 		data: any,
-		headers: AxiosRequestHeaders): string | ArrayBuffer | null // | Buffer | null
+		headers: AxiosRequestHeaders): string | ArrayBuffer  | Buffer | null
 	{
 		return data;
 	}

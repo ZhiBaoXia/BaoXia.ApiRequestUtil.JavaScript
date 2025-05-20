@@ -30,7 +30,7 @@ export abstract class BaoXiaTestServiceApi extends ApiService
 	protected didTransformRequest(
 		data: any,
 		headers: AxiosRequestHeaders)
-		: string | ArrayBuffer | null // | Buffer | null
+		: string | ArrayBuffer | Buffer | null
 	{
 		var baseResult = super.didTransformRequest(data, headers);
 
