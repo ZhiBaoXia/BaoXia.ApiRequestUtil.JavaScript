@@ -1,6 +1,6 @@
 import { DateTime, JsonUtil, PathUtil, StringUtil } from '@baoxia/utils.javascript';
 import { UriPathDelimiter } from '@baoxia/utils.javascript/lib/constant/uriPathDelimiter.js';
-import axios, { Axios, AxiosError, AxiosHeaders, AxiosInstance, AxiosRequestHeaders, AxiosResponseHeaders, CreateAxiosDefaults, RawAxiosRequestHeaders } from 'axios';
+import axios, { AxiosError, AxiosHeaders, AxiosInstance, AxiosRequestHeaders, AxiosResponseHeaders, CreateAxiosDefaults, RawAxiosRequestHeaders } from 'axios';
 // node环境下需要使用“form-data”。
 // import FormData from 'form-data';
 import { ApiRequestContentType } from './apiRequestContentType.js';
@@ -205,11 +205,22 @@ export abstract class ApiService
 						})
 						.catch((error: AxiosError | any) =>
 						{
+							let apiResponseInfo: ApiResponseInfo<ResponseParamType> | null = null;
+							const response = error.response;
+							if (response)
+							{
+								apiResponseInfo
+									= new ApiResponseInfo<ResponseParamType>(
+										null,
+										response.data,
+										response);
+							}
+
 							////////////////////////////////////////////////                    
 							// !!!
 							callback.setResult(
 								error,
-								null);
+								apiResponseInfo);
 							// !!!
 							////////////////////////////////////////////////
 						});
@@ -302,11 +313,22 @@ export abstract class ApiService
 						})
 						.catch((error: AxiosError | any) =>
 						{
+							let apiResponseInfo: ApiResponseInfo<ResponseParamType> | null = null;
+							const response = error.response;
+							if (response)
+							{
+								apiResponseInfo
+									= new ApiResponseInfo<ResponseParamType>(
+										null,
+										response.data,
+										response);
+							}
+
 							////////////////////////////////////////////////                    
 							// !!!
 							callback.setResult(
 								error,
-								null);
+								apiResponseInfo);
 							// !!!
 							////////////////////////////////////////////////
 						});
@@ -721,11 +743,11 @@ export abstract class ApiService
 
 	protected didTransformRequest(
 		data: any,
-		headers: AxiosRequestHeaders): string | ArrayBuffer  | Buffer | null
+		headers: AxiosRequestHeaders): string | ArrayBuffer | Buffer | null
 	{
 		return data;
 	}
-	
+
 
 	protected didTransformResponse<ResponseParamType>(
 		data: any,
