@@ -54,9 +54,11 @@ export abstract class ApiService
 		let apiServiceUrlRoot: string;
 		{
 			let apiUrlRootPath = this.apiUrlRootPath;
-			if (StringUtil.isEmpty(apiUrlRootPath))
+			const apiUrlRootPathByEventPoint = this.didGetApiRootPath();
+			if (apiUrlRootPathByEventPoint
+				&& apiUrlRootPathByEventPoint.length > 0)
 			{
-				apiUrlRootPath = this.didGetApiRootPath();
+				apiUrlRootPath = apiUrlRootPathByEventPoint;
 			}
 			apiUrlRootPath
 				= PathUtil.toDirectoryPathFromUriPath(apiUrlRootPath);
