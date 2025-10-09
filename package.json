@@ -1,6 +1,6 @@
 {
   "name": "@baoxia/apirequestutil.javascript",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "description": "BaoXia Software，Api Request Util.",
   "type": "module",
   "files": [
