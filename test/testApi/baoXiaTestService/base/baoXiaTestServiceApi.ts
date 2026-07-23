@@ -14,10 +14,10 @@ export abstract class BaoXiaTestServiceApi extends ApiService
 	// @重载
 	////////////////////////////////////////////////
 
-	protected didTransformRequestHeaders(headers: RawAxiosRequestHeaders | AxiosHeaders)
+	protected didTransformRequestHeaders(apiMethodPath: string, headers: RawAxiosRequestHeaders | AxiosHeaders)
 		: RawAxiosRequestHeaders | AxiosHeaders
 	{
-		var baseResult = super.didTransformRequestHeaders(headers);
+		var baseResult = super.didTransformRequestHeaders(apiMethodPath, headers);
 
 		// !!!
 		headers["BxApi-Transform-Request-Headers-01"] = "Transform-Request-Headers-01";
@@ -27,12 +27,10 @@ export abstract class BaoXiaTestServiceApi extends ApiService
 		return baseResult;
 	}
 
-	protected didTransformRequest(
-		data: any,
-		headers: AxiosRequestHeaders)
+	protected didTransformRequest(apiMethodPath: string, data: any,headers: AxiosRequestHeaders)
 		: string | ArrayBuffer | Buffer | null
 	{
-		var baseResult = super.didTransformRequest(data, headers);
+		var baseResult = super.didTransformRequest(apiMethodPath, data, headers);
 
 		// !!!
 		headers["BxApi-Shop-Identity"] = "BaoXia_ApiRequestUtil_JavaScript";
