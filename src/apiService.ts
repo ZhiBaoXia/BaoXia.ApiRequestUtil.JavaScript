@@ -152,44 +152,36 @@ export abstract class ApiService
 						}
 					}
 
-					this.getAxios()
-						.post(
-							apiMethodPath,
-							finalRequestParam,
-							{
-								headers: this.didTransformRequestHeaders({
-									'Content-Type': requestContentType
-								}),
-								transformRequest: [
-									(data, headers) =>
+					this.getAxios().post(apiMethodPath, finalRequestParam,
+						{
+							headers: this.didTransformRequestHeaders(apiMethodPath, {
+								'Content-Type': requestContentType
+							}),
+							transformRequest: [
+								(data, headers) =>
+								{
+									let finalRequestData = this.didTransformRequest(apiMethodPath, data, headers);
+									if (finalRequestData != null)
 									{
-										let finalRequestData
-											= this.didTransformRequest(
-												data,
-												headers);
-										if (finalRequestData != null)
+										if (typeof finalRequestData === 'object')
 										{
-											if (typeof finalRequestData === 'object')
+											if (typeof window == 'undefined'
+												|| !window.FormData
+												|| !(finalRequestData instanceof FormData))
 											{
-												if (typeof window == 'undefined'
-													|| !window.FormData
-													|| !(finalRequestData instanceof FormData))
-												{
-													finalRequestData = JSON.stringify(finalRequestData);
-												}
+												finalRequestData = JSON.stringify(finalRequestData);
 											}
 										}
-										return finalRequestData;
-									}],
-								transformResponse: [
-									(data, headers, statusCode) =>
-									{
-										return this.didTransformResponse<ResponseParamType>(
-											data,
-											headers,
-											statusCode);
-									}]
-							})
+									}
+									return finalRequestData;
+								}],
+							transformResponse: [
+								(data, headers, statusCode) =>
+								{
+									return this.didTransformResponse<ResponseParamType>(
+										apiMethodPath, data, headers, statusCode);
+								}]
+						})
 						.then((response) =>
 						{
 							let apiResponseInfo
@@ -211,18 +203,13 @@ export abstract class ApiService
 							const response = error.response;
 							if (response)
 							{
-								apiResponseInfo
-									= new ApiResponseInfo<ResponseParamType>(
-										null,
-										response.data,
-										response);
+								apiResponseInfo = new ApiResponseInfo<ResponseParamType>(
+									null, response.data, response);
 							}
 
 							////////////////////////////////////////////////                    
 							// !!!
-							callback.setResult(
-								error,
-								apiResponseInfo);
+							callback.setResult(error, apiResponseInfo);
 							// !!!
 							////////////////////////////////////////////////
 						});
@@ -278,22 +265,17 @@ export abstract class ApiService
 							apiMethodPath,
 							{
 								params: requestParam,
-								headers: this.didTransformRequestHeaders({
-								}),
+								headers: this.didTransformRequestHeaders(apiMethodPath, {}),
 								transformRequest: [
 									(data, headers) =>
 									{
-										return this.didTransformRequest(
-											data,
-											headers);
+										return this.didTransformRequest(apiMethodPath, data, headers);
 									}],
 								transformResponse: [
 									(data, headers, statusCode) =>
 									{
 										let finalResponse = this.didTransformResponse<ResponseParamType>(
-											data,
-											headers,
-											statusCode);
+											apiMethodPath, data, headers, statusCode);
 										{ }
 										return finalResponse;
 									}]
@@ -469,16 +451,14 @@ export abstract class ApiService
 									apiMethodPath,
 									finalRequestParam,
 									{
-										headers: this.didTransformRequestHeaders({
+										headers: this.didTransformRequestHeaders(apiMethodPath, {
 											'Content-Type': requestContentType
 										}),
 										transformRequest: [
 											(data, headers) =>
 											{
-												let finalRequestData
-													= this.didTransformRequest(
-														data,
-														headers);
+												let finalRequestData = this.didTransformRequest(
+													apiMethodPath, data, headers);
 												if (finalRequestData != null)
 												{
 
@@ -498,16 +478,11 @@ export abstract class ApiService
 											(data, headers, statusCode) =>
 											{
 												return this.didTransformResponse<ResponseParamType>(
-													data,
-													headers,
-													statusCode);
+													apiMethodPath, data, headers, statusCode);
 											}]
 									});
-						apiResponseInfo
-							= new ApiResponseInfo<ResponseParamType>(
-								null,
-								axiosResponseInfo.data,
-								axiosResponseInfo);
+						apiResponseInfo = new ApiResponseInfo<ResponseParamType>(
+							null, axiosResponseInfo.data, axiosResponseInfo);
 					}
 					catch (exception: unknown)
 					{
@@ -574,22 +549,17 @@ export abstract class ApiService
 								apiMethodPath,
 								{
 									params: requestParam,
-									headers: this.didTransformRequestHeaders({
-									}),
+									headers: this.didTransformRequestHeaders(apiMethodPath, {}),
 									transformRequest: [
 										(data, headers) =>
 										{
-											return this.didTransformRequest(
-												data,
-												headers);
+											return this.didTransformRequest(apiMethodPath, data, headers);
 										}],
 									transformResponse: [
 										(data, headers, statusCode) =>
 										{
 											let finalResponse = this.didTransformResponse<ResponseParamType>(
-												data,
-												headers,
-												statusCode);
+												apiMethodPath, data, headers, statusCode);
 											{ }
 											return finalResponse;
 										}]
@@ -738,23 +708,20 @@ export abstract class ApiService
 	}
 
 	protected didTransformRequestHeaders(
-		headers: RawAxiosRequestHeaders | AxiosHeaders): RawAxiosRequestHeaders | AxiosHeaders
+		requestUrl: string, headers: RawAxiosRequestHeaders | AxiosHeaders): RawAxiosRequestHeaders | AxiosHeaders
 	{
 		return headers;
 	}
 
 	protected didTransformRequest(
-		data: any,
-		headers: AxiosRequestHeaders): string | ArrayBuffer | Buffer | null
+		requestUrl: string, data: any, headers: AxiosRequestHeaders): string | ArrayBuffer | Buffer | null
 	{
 		return data;
 	}
 
 
 	protected didTransformResponse<ResponseParamType>(
-		data: any,
-		headers: AxiosResponseHeaders,
-		statusCode?: number): ResponseParamType | null
+		requestUrl: string, data: any, headers: AxiosResponseHeaders, statusCode?: number): ResponseParamType | null
 	{
 		if (data == null
 			|| typeof data == undefined)
